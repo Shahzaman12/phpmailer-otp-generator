@@ -1,0 +1,38 @@
+require('includes/dbconnection.php');
+//Email the otp to the user
+// Generate a random 6-digit OTP
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require './PHPMailer/src/PHPMailer.php';
+require './PHPMailer/src/SMTP.php';
+$otp = rand(100000, 999999);
+$email = ($_POST['email']);
+$mail = new PHPMailer;
+          $mail->isSMTP();
+          $mail->SMTPDebug = 0;
+          $mail->Host = 'smtp.gmail.com';
+          $mail->Port = 587;
+          $mail->SMTPAuth = true;
+          $mail->Username = 'your email here';
+          $mail->Password = '3rd party password generator like google authenticator';
+          $mail->setFrom(' your email Email here', 'name');
+          $mail->addReplyTo('Your Email here', 'name');
+          $mail->addAddress ($email);
+          $mail->Subject = 'Reset Password';
+          //$mail->msgHTML(file_get_contents('message.html'), __DIR__);
+          $mail->Body = 'your new OTP is: ' . $otp;;
+          
+                // Send the email
+                if (!$mail->send()) {
+                    echo 'Error: ' . $mail->ErrorInfo;
+                } else {
+                    echo "<p class='alert alert-success'>Your new OTP has been sent to your email address. </p>";
+                
+                }
+         {
+            die ('Could not enter data:'.mysqli_error($conn));
+        }
+        }
+
+?>
